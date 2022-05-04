@@ -26,10 +26,13 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import {
+  faAngleDown,
+  faArrowDown,
   faCheckSquare,
   faCoffee,
   faPlus,
   faPlusSquare,
+  faTrash,
 } from '@fortawesome/fontawesome-free-solid'
 
 const lightTheme = createTheme({ palette: { mode: 'light' } })
@@ -55,9 +58,7 @@ const Todo = () => {
   const [checked, setChecked] = useState([])
 
   const handleChange1 = (event) => {
-    setChecked([event.target.checked])
-    if (checked) {
-    }
+    setChecked([event.target.checked, event.target.checked])
   }
 
   const handleChange2 = (event) => {
@@ -153,12 +154,23 @@ const Todo = () => {
                     />
                   }
                 />
+                <IconButton
+                  aria-label="delete"
+                  onClick={() => {
+                    dispatch(deleteTask(tl.id))
+                  }}
+                >
+                  <FontAwesomeIcon
+                    icon={faTrash}
+                    style={{ maxWidth: '15px' }}
+                  />
+                </IconButton>
                 <FormControl variant="standard">
                   {/* <Typography paragraph>{elem.data}</Typography> */}
                 </FormControl>
               </CardContent>
               <CardActions disableSpacing>
-                <Typography paragraph>
+                <Typography paragraph className="fclass">
                   {complete} of {count} completed{' '}
                 </Typography>
                 <ExpandMore
@@ -167,7 +179,7 @@ const Todo = () => {
                   aria-expanded={expanded}
                   aria-label="show more"
                 >
-                  >
+                  <FontAwesomeIcon icon={faAngleDown} />
                 </ExpandMore>
               </CardActions>
               <Collapse in={expanded} timeout="auto" unmountOnExit>

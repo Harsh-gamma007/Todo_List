@@ -53,3 +53,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.fclass{
+  font-size: 5%;
+  color: rgb(166, 161, 161);
+}
