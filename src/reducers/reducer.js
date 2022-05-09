@@ -1,6 +1,7 @@
 const initialData = {
   list: [],
 }
+
 const reducer = (state = initialData, action) => {
   switch (action.type) {
     case 'ADD_TASK':
@@ -12,6 +13,26 @@ const reducer = (state = initialData, action) => {
           {
             id: id,
             data: data,
+            completed: false,
+            subList: [],
+          },
+        ],
+      }
+    case 'ADD_SUB_TASK':
+      const { sId, sData } = action.payload
+      return {
+        ...state,
+        list: [
+          ...state.list,
+
+          {
+            subList: [
+              {
+                sId: sId,
+                sData: sData,
+                sSubmitted: '',
+              },
+            ],
           },
         ],
       }
@@ -21,6 +42,13 @@ const reducer = (state = initialData, action) => {
         ...state,
         list: newList,
       }
+    case 'DELETE_SUB_TASK':
+      const newSList = state.list.subList.filter((sl) => sl.sId !== action.sId)
+      return {
+        ...state,
+        subList: newSList,
+      }
+
     default:
       return state
   }

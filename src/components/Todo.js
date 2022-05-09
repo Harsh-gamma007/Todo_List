@@ -1,19 +1,19 @@
 import React, { useState } from 'react'
 import '../styles.css'
 import { useDispatch, useSelector } from 'react-redux'
-import { addTask, deleteTask, deleteAllTasks } from '../actions/index'
+import {
+  addTask,
+  deleteTask,
+  addSubTask,
+  deleteSubTask,
+} from '../actions/index'
 import { styled } from '@mui/material/styles'
 import {
   Box,
   Button,
   TextField,
-  Grid,
   Checkbox,
   FormControlLabel,
-  FormControl,
-  Paper,
-  createTheme,
-  ThemeProvider,
   Card,
   CardActions,
   CardContent,
@@ -21,21 +21,10 @@ import {
   Collapse,
   IconButton,
   Tooltip,
-  InputBase,
 } from '@mui/material'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import {
-  faAngleDown,
-  faArrowDown,
-  faCheckSquare,
-  faCoffee,
-  faPlus,
-  faPlusSquare,
-  faTrash,
-} from '@fortawesome/fontawesome-free-solid'
-
-const lightTheme = createTheme({ palette: { mode: 'light' } })
+import { faAngleDown, faTrash } from '@fortawesome/fontawesome-free-solid'
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props
@@ -50,7 +39,9 @@ const ExpandMore = styled((props) => {
 
 const Todo = () => {
   const [task, setTask] = useState('')
+  const [subTask, setSubTask] = useState('')
   const list = useSelector((state) => state.rootReducers.reducer.list)
+  // const subList = useSelector((state) => state.rootReducers.reducer.subList)
 
   const dispatch = useDispatch()
 
@@ -59,50 +50,31 @@ const Todo = () => {
 
   const handleChange1 = (event) => {
     setChecked([event.target.checked, event.target.checked])
+    // dispatch
   }
 
-  const handleChange2 = (event) => {
-    setChecked([event.target.checked, checked[1]])
-  }
+  // const handleChange2 = (event) => {
+  //   setChecked([event.target.checked, checked[1]])
+  // }
 
-  const handleChange3 = (event) => {
-    setChecked([checked[0], event.target.checked])
-  }
-  // const bull = (
+  // const handleChange3 = (event) => {
+  //   setChecked([checked[0], event.target.checked])
+  // }
 
-  // //   <Box
-  // //     component="span"
-  // //     sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}
-  // //   >
-  // //     •
-  // //   </Box>
-  // // )
-
-  // const children = (
-  //   <Box sx={{ display: 'flex', flexDirection: 'column', ml: 3 }}>
-  //     <FormControlLabel
-  //       label="Child 1"
-  //       control={<Checkbox checked={checked[0]} onChange={handleChange2} />}
-  //     />
-  //     <FormControlLabel
-  //       label="Child 2"
-  //       control={<Checkbox checked={checked[1]} onChange={handleChange3} />}
-  //     />
-  //   </Box>
-  // )
-  const [expanded, setExpanded] = useState(false)
-  const [count, setCount] = useState(0)
-  const [complete, setComplete] = useState(0)
+  const [expanded, setExpanded] = useState()
+  // const [count, setCount] = useState(0)
+  // const [complete, setComplete] = useState(0)
   const handleExpandClick = () => {
     setExpanded(!expanded)
   }
-  const handleChildSubmit = (e) => {
-    e.preventDefault()
-    alert('child SUbmitted!')
-  }
+  // const handleChildSubmit = (e) => {
+  //   e.preventDefault()
+  //   alert('child SUbmitted!')
+  // }
   return (
     <>
       <div style={{ paddingBottom: '20px' }}>
+        {/* Main Tasks form */}
         <Box
           component="form"
           sx={{
@@ -139,19 +111,16 @@ const Todo = () => {
           </Button>
         </Box>
       </div>
-
+      {/* Main Tasks Display  */}
       {list.map((tl) => {
         return (
           <>
-            <Card sx={{ width: 300, minHeight: 20 }} key={tl.id}>
+            <Card key={tl.id} sx={{ width: 300, minHeight: 20 }}>
               <CardContent>
                 <FormControlLabel
                   label={tl.data}
                   control={
-                    <Checkbox
-                      indeterminate={checked[0] !== checked[1]}
-                      onChange={handleChange1}
-                    />
+                    <Checkbox indeterminate={checked[0] !== checked[1]} />
                   }
                 />
                 <IconButton
@@ -165,13 +134,12 @@ const Todo = () => {
                     style={{ maxWidth: '15px' }}
                   />
                 </IconButton>
-                <FormControl variant="standard">
-                  {/* <Typography paragraph>{elem.data}</Typography> */}
-                </FormControl>
               </CardContent>
+              {/* Child Tasks Sections */}
               <CardActions disableSpacing>
                 <Typography paragraph className="fclass">
-                  {complete} of {count} completed{' '}
+                  {/* {complete} of {count} completed{' '} */}
+                  Sub-Tasks
                 </Typography>
                 <ExpandMore
                   expand={expanded}
@@ -182,82 +150,67 @@ const Todo = () => {
                   <FontAwesomeIcon icon={faAngleDown} />
                 </ExpandMore>
               </CardActions>
+
               <Collapse in={expanded} timeout="auto" unmountOnExit>
-                <CardContent>
-                  <Typography paragraph>
-                    <Paper
-                      component="form"
-                      sx={{
-                        p: '2px 4px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        width: 260,
-                      }}
-                    >
-                      {/* <IconButton sx={{ p: '10px' }} aria-label="menu">
-                        <MenuIcon />
-                      </IconButton> */}
-                      <InputBase
-                        sx={{ ml: 1, flex: 1 }}
-                        placeholder="Sub Tasks"
-                        inputProps={{ 'aria-label': 'Sub Tasks' }}
+                {tl.subList.map((sl) => {
+                  return (
+                    <CardContent>
+                      <FormControlLabel
+                        label={sl.sData}
+                        control={
+                          <Checkbox
+                            indeterminate={checked[0] !== checked[1]}
+                            onChange={handleChange1}
+                            key={sl.sId}
+                          />
+                        }
                       />
                       <IconButton
-                        type="submit"
-                        sx={{ p: '10px' }}
-                        aria-label="search"
-                        onClick={handleChildSubmit}
+                        aria-label="delete"
+                        onClick={() => {
+                          dispatch(deleteSubTask(sl.sId))
+                        }}
                       >
-                        <FontAwesomeIcon icon={faPlus} />
+                        <FontAwesomeIcon
+                          icon={faTrash}
+                          style={{ maxWidth: '15px' }}
+                        />
                       </IconButton>
-                      {/* <Divider
-                        sx={{ height: 28, m: 0.5 }}
-                        orientation="vertical"
+                    </CardContent>
+                  )
+                })}
+
+                <CardContent>
+                  <Box
+                    component="form"
+                    sx={{
+                      '& > :not(style)': { m: 1, width: '18ch' },
+                    }}
+                    noValidate
+                    autoComplete="off"
+                    onSubmit={(e) => {
+                      e.preventDefault()
+                      dispatch(addSubTask(subTask), setSubTask(''))
+                    }}
+                  >
+                    <Tooltip
+                      title="Tasks Should be of 30 Characters Only!"
+                      placement="top"
+                    >
+                      <TextField
+                        id="outlined-name"
+                        color="success"
+                        label="Sub-Tasks"
+                        value={subTask}
+                        onChange={(e) => setSubTask(e.target.value)}
                       />
-                      <IconButton
-                        color="primary"
-                        sx={{ p: '10px' }}
-                        aria-label="directions"
-                      >
-                        <DirectionsIcon />
-                      </IconButton> */}
-                    </Paper>
-                  </Typography>
+                    </Tooltip>
+                  </Box>
                 </CardContent>
               </Collapse>
             </Card>
             <br />
           </>
-
-          // <ThemeProvider theme={lightTheme} key={elem.id}>
-          //   <Box
-          //     sx={{
-          //       display: 'flex',
-          //       '& > :not(style)': {
-          //         m: 1,
-          //         width: 250,
-          //         height: 128,
-          //       },
-          //     }}
-          //   >
-          //     <Paper elevation={12} xs={8}>
-          //       <div style={{ paddingLeft: '20px', minWidth: '20px' }}>
-          //         <FormControlLabel
-          //         label={elem.data}
-          //         control=
-          //         {
-          //           <Checkbox
-          //             checked={checked[0] && checked[1]}
-          //             indeterminate={checked[0] !== checked[1]}
-          //             onChange={handleChange1}
-          //           />
-          //         }
-          //         />
-          //         {/* {children} */}
-          //       </div>
-          //     </Paper>
-          //   </Box>
-          // </ThemeProvider>
         )
       })}
     </>

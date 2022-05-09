@@ -11,7 +11,7 @@ import {
   REGISTER,
 } from 'redux-persist'
 
-import rootReducers from './reducers/index'
+import rootReducers from '../reducers/index'
 
 const persistConfig = {
   key: 'counter',
