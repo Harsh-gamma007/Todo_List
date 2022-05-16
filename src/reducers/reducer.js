@@ -18,24 +18,114 @@ const reducer = (state = initialData, action) => {
           },
         ],
       }
+    case 'Task_Completed':
+      const newLlist = state.list.filter((tl) => (tl.completed = true))
+      return {
+        ...state,
+        list: newLlist,
+      }
+
+    case 'Task_Incompleted':
+      const newlist = state.list.filter((tl) => (tl.completed = false))
+      return {
+        ...state,
+        list: newlist,
+      }
+    // const { completed } = action.payload
+    // return {
+    //   ...state,
+    //   list: [
+    //     ...state.list,
+    //     {
+    //       completed: completed,
+    //     },
+    //   ],
+    // }
     case 'ADD_SUB_TASK':
-      const { sId, sData } = action.payload
+      const newSsist = state.subList.filter((i) => i.id === action.id)
+      // const newSist = [...state.subList]
       return {
         ...state,
         list: [
           ...state.list,
-
           {
             subList: [
               {
-                sId: sId,
-                sData: sData,
-                sSubmitted: '',
+                subList: newSsist,
               },
             ],
           },
         ],
       }
+    // state.list.filter((i) => i.id === action.id)
+    // const { sId, sData } = action.payload
+    // return {
+    //   ...state,
+    //   list: [
+    //     ...state.list,
+    //     {
+    //       subList: [
+    //         ...state.subList,
+    //         {
+    //           sId: sId,
+    //           sData: sData,
+    //           sCompleted: false,
+    //         },
+    //       ],
+    //     },
+    //   ],
+    // }
+
+    // const check = (t) =>{ (t.id === action.id) ?
+    //   const { sId, sData } = action.payload
+    //   return {
+    //     ...state,
+    //     list: [
+    //       ...state.list,
+    //       {
+    //         subList: [
+    //           {
+    //             sId: sId,
+    //             sData: sData,
+    //             completed: false,
+    //           },
+    //         ],
+    //       },
+    //     ],
+    //   } : return state
+    // }
+    //   const { sId, sData } = action.payload
+    //   state.list.sublist.push(action.payload)
+    //   return state
+
+    // const { sId, sData } = action.payload
+    // return {
+    //   ...state,
+    //   list: [
+    //     ...state.list,
+    //     {
+    //       subList: [
+    //         {
+    //           sId: sId,
+    //           sData: sData,
+    //           completed: false,
+    //         },
+    //       ],
+    //     },
+    //   ],
+    // }
+    // case 'COMPLETE_TASK':
+    //   state.list.filter((t) => t.id === action.id)
+    //   return {
+    //     ...state,
+    //     list: [
+    //       ...state.list,
+    //       {
+    //         completed: true,
+    //       },
+    //     ],
+    //   }
+
     case 'DELETE_TASK':
       const newList = state.list.filter((tl) => tl.id !== action.id)
       return {

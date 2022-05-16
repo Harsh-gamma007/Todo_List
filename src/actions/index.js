@@ -18,6 +18,19 @@ export const addSubTask = (sData) => {
     },
   }
 }
+export const taskCompleted = () => {
+  return {
+    type: 'Task_Completed',
+    // id: completed.id,
+    completed: true,
+  }
+}
+export const taskIncompleted = () => {
+  return {
+    type: 'Task_Incompleted',
+    completed: false,
+  }
+}
 
 export const deleteTask = (id) => {
   return {

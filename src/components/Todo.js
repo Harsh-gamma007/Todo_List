@@ -5,7 +5,8 @@ import {
   addTask,
   deleteTask,
   addSubTask,
-  deleteSubTask,
+  taskCompleted,
+  taskIncompleted,
 } from '../actions/index'
 import { styled } from '@mui/material/styles'
 import {
@@ -46,31 +47,19 @@ const Todo = () => {
   const dispatch = useDispatch()
 
   //Display Elements
-  const [checked, setChecked] = useState([])
+  const [completed, setCompleted] = useState(false)
 
-  const handleChange1 = (event) => {
-    setChecked([event.target.checked, event.target.checked])
-    // dispatch
+  const handleChange1 = (e) => {
+    e.preventDefault()
+    setCompleted(!completed)
+    !completed ? dispatch(taskCompleted()) : dispatch(taskIncompleted())
+    // dispatch(taskCompleted(completed))
   }
 
-  // const handleChange2 = (event) => {
-  //   setChecked([event.target.checked, checked[1]])
-  // }
-
-  // const handleChange3 = (event) => {
-  //   setChecked([checked[0], event.target.checked])
-  // }
-
   const [expanded, setExpanded] = useState()
-  // const [count, setCount] = useState(0)
-  // const [complete, setComplete] = useState(0)
   const handleExpandClick = () => {
     setExpanded(!expanded)
   }
-  // const handleChildSubmit = (e) => {
-  //   e.preventDefault()
-  //   alert('child SUbmitted!')
-  // }
   return (
     <>
       <div style={{ paddingBottom: '20px' }}>
@@ -120,9 +109,10 @@ const Todo = () => {
                 <FormControlLabel
                   label={tl.data}
                   control={
-                    <Checkbox indeterminate={checked[0] !== checked[1]} />
+                    <Checkbox checked={tl.completed} onChange={handleChange1} />
                   }
                 />
+
                 <IconButton
                   aria-label="delete"
                   onClick={() => {
@@ -159,7 +149,7 @@ const Todo = () => {
                         label={sl.sData}
                         control={
                           <Checkbox
-                            indeterminate={checked[0] !== checked[1]}
+                            indeterminate={completed[0] !== completed[1]}
                             onChange={handleChange1}
                             key={sl.sId}
                           />
@@ -167,9 +157,9 @@ const Todo = () => {
                       />
                       <IconButton
                         aria-label="delete"
-                        onClick={() => {
-                          dispatch(deleteSubTask(sl.sId))
-                        }}
+                        // onClick={() => {
+                        //   dispatch(deleteSubTask(sl.sId))
+                        // }}
                       >
                         <FontAwesomeIcon
                           icon={faTrash}
