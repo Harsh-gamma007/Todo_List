@@ -1,46 +1,53 @@
-var count = 0
-var sCount = 0
-export const addTask = (data) => {
+import {
+  GET_LISTS,
+  ADD_PARENT_LIST,
+  ADD_CHILD_LIST,
+  DELETE_TASK,
+  DELETE_CHILD_TASK,
+  ADD_ACTION_COMPLETE,
+  ADD_ACTION_INCOMPLETE,
+  ADD_CHILD_ACTION_COMPLETE,
+  ADD_CHILD_ACTION_INCOMPLETE,
+} from '../const'
+
+export const getLists = () => {
+  return { type: GET_LISTS }
+}
+
+export const addParentList = ({ name }) => {
+  return { type: ADD_PARENT_LIST, payload: { name } }
+}
+export const deleteTask = ({ parentId }) => {
   return {
-    type: 'ADD_TASK',
+    type: DELETE_TASK,
+    payload: { parentId },
+  }
+}
+export const addChildList = ({ parentId, name }) => {
+  return { type: ADD_CHILD_LIST, payload: { parentId, name } }
+}
+export const deleteChildTask = ({ parentId, childId }) => {
+  return {
+    type: DELETE_CHILD_TASK,
     payload: {
-      id: count++,
-      data: data,
+      parentId,
+      childId,
     },
-  }
-}
-export const addSubTask = (sData) => {
-  return {
-    type: 'ADD_SUB_TASK',
-    payload: {
-      sId: sCount++,
-      sData: sData,
-    },
-  }
-}
-export const taskCompleted = () => {
-  return {
-    type: 'Task_Completed',
-    // id: completed.id,
-    completed: true,
-  }
-}
-export const taskIncompleted = () => {
-  return {
-    type: 'Task_Incompleted',
-    completed: false,
   }
 }
 
-export const deleteTask = (id) => {
-  return {
-    type: 'DELETE_TASK',
-    id,
-  }
+export const addActionComplete = ({ parentId }) => {
+  return { type: ADD_ACTION_COMPLETE, payload: { parentId } }
 }
-export const deleteSubTask = (sId) => {
-  return {
-    type: 'DELETE_SUB_TASK',
-    sId,
-  }
+
+export const addActionInComplete = ({ parentId }) => {
+  return { type: ADD_ACTION_INCOMPLETE, payload: { parentId } }
+}
+
+export const addChildActionComplete = ({ parentId, childId }) => {
+  return { type: ADD_CHILD_ACTION_COMPLETE, payload: { parentId, childId } }
+}
+
+export const addChildActionInComplete = ({ parentId, childId }) => {
+  return { type: ADD_CHILD_ACTION_INCOMPLETE, payload: { parentId, childId } }
 }

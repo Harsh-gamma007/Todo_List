@@ -1,147 +1,149 @@
-const initialData = {
-  list: [],
+import {
+  GET_LISTS,
+  ADD_PARENT_LIST,
+  ADD_CHILD_LIST,
+  DELETE_TASK,
+  DELETE_CHILD_TASK,
+  ADD_ACTION_COMPLETE,
+  ADD_ACTION_INCOMPLETE,
+  ADD_CHILD_ACTION_COMPLETE,
+  ADD_CHILD_ACTION_INCOMPLETE,
+} from '../const'
+
+const initialStates = {
+  lists: [],
 }
 
-const reducer = (state = initialData, action) => {
+var random = () => {
+  return Math.random().toString(36).substr(2, 3)
+}
+
+const reducer = (state = initialStates, action) => {
   switch (action.type) {
-    case 'ADD_TASK':
-      const { id, data } = action.payload
+    case GET_LISTS:
+      return {
+        lists: state.lists,
+      }
+
+    //Reducers for parents
+
+    case ADD_PARENT_LIST:
+      const item = {
+        id: random(),
+        name: action.payload.name,
+        completed: false,
+        sublist: [],
+      }
       return {
         ...state,
-        list: [
-          ...state.list,
-          {
-            id: id,
-            data: data,
-            completed: false,
-            subList: [],
-          },
+
+        lists: [...state.lists, item],
+      }
+
+    case DELETE_TASK:
+      const pIdIndex = state.lists.findIndex(
+        (data) => data.id === action.payload.parentId
+      )
+      return {
+        ...state,
+        lists: [
+          ...state.lists.slice(0, pIdIndex),
+          ...state.lists.slice(pIdIndex + 1),
         ],
       }
-    case 'Task_Completed':
-      const newLlist = state.list.filter((tl) => (tl.completed = true))
+
+    case ADD_ACTION_COMPLETE:
+      const parentIndex = state.lists.findIndex(
+        (data) => data.id === action.payload.parentId
+      )
+      state.lists[parentIndex] = {
+        ...state.lists[parentIndex],
+        completed: !state.lists[parentIndex].completed,
+      }
       return {
         ...state,
-        list: newLlist,
+        lists: state.lists,
       }
 
-    case 'Task_Incompleted':
-      const newlist = state.list.filter((tl) => (tl.completed = false))
-      return {
-        ...state,
-        list: newlist,
+    case ADD_ACTION_INCOMPLETE:
+      const parentIndexIn = state.lists.findIndex(
+        (data) => data.id === action.payload.parentId
+      )
+      state.lists[parentIndexIn] = {
+        ...state.lists[parentIndexIn],
+        completed: false,
       }
-    // const { completed } = action.payload
-    // return {
-    //   ...state,
-    //   list: [
-    //     ...state.list,
-    //     {
-    //       completed: completed,
-    //     },
-    //   ],
-    // }
-    case 'ADD_SUB_TASK':
-      const newSsist = state.subList.filter((i) => i.id === action.id)
-      // const newSist = [...state.subList]
+
       return {
-        ...state,
-        list: [
-          ...state.list,
-          {
-            subList: [
-              {
-                subList: newSsist,
-              },
-            ],
-          },
-        ],
+        lists: state.lists,
       }
-    // state.list.filter((i) => i.id === action.id)
-    // const { sId, sData } = action.payload
-    // return {
-    //   ...state,
-    //   list: [
-    //     ...state.list,
-    //     {
-    //       subList: [
-    //         ...state.subList,
-    //         {
-    //           sId: sId,
-    //           sData: sData,
-    //           sCompleted: false,
-    //         },
-    //       ],
-    //     },
-    //   ],
-    // }
 
-    // const check = (t) =>{ (t.id === action.id) ?
-    //   const { sId, sData } = action.payload
-    //   return {
-    //     ...state,
-    //     list: [
-    //       ...state.list,
-    //       {
-    //         subList: [
-    //           {
-    //             sId: sId,
-    //             sData: sData,
-    //             completed: false,
-    //           },
-    //         ],
-    //       },
-    //     ],
-    //   } : return state
-    // }
-    //   const { sId, sData } = action.payload
-    //   state.list.sublist.push(action.payload)
-    //   return state
-
-    // const { sId, sData } = action.payload
-    // return {
-    //   ...state,
-    //   list: [
-    //     ...state.list,
-    //     {
-    //       subList: [
-    //         {
-    //           sId: sId,
-    //           sData: sData,
-    //           completed: false,
-    //         },
-    //       ],
-    //     },
-    //   ],
-    // }
-    // case 'COMPLETE_TASK':
-    //   state.list.filter((t) => t.id === action.id)
-    //   return {
-    //     ...state,
-    //     list: [
-    //       ...state.list,
-    //       {
-    //         completed: true,
-    //       },
-    //     ],
-    //   }
-
-    case 'DELETE_TASK':
-      const newList = state.list.filter((tl) => tl.id !== action.id)
+    // Reducers for sublist / child
+    case ADD_CHILD_LIST:
+      const parentIdIndex = state.lists.findIndex(
+        (data) => data.id === action.payload.parentId
+      )
+      state.lists[parentIdIndex].sublist.push({
+        id: random(),
+        name: action.payload.name,
+        completed: false,
+      })
       return {
-        ...state,
-        list: newList,
+        lists: state.lists,
       }
-    case 'DELETE_SUB_TASK':
-      const newSList = state.list.subList.filter((sl) => sl.sId !== action.sId)
+
+    case DELETE_CHILD_TASK:
+      const pidIndex = state.lists.findIndex(
+        (data) => data.id === action.payload.parentId
+      )
+      const childIndex = state.lists[pidIndex].sublist.findIndex(
+        (d) => d.id === action.payload.childId
+      )
+      console.log(childIndex)
+      state.lists[pidIndex].sublist = {
+        ...state.lists[pidIndex].sublist.slice(0, childIndex),
+        ...state.lists[pidIndex].sublist.slice(childIndex + 1),
+      }
+
       return {
         ...state,
-        subList: newSList,
+        lists: state.lists,
+      }
+
+    case ADD_CHILD_ACTION_COMPLETE:
+      const parentCIndex = state.lists.findIndex(
+        (data) => data.id === action.payload.parentId
+      )
+      const childIndexC = state.lists[parentCIndex].sublist.findIndex(
+        (d) => d.id === action.payload.childId
+      )
+      state.lists[parentCIndex].sublist[childIndexC] = {
+        ...state.lists[parentCIndex].sublist[childIndexC],
+        completed: true,
+      }
+      return {
+        ...state,
+        lists: state.lists,
+      }
+
+    case ADD_CHILD_ACTION_INCOMPLETE:
+      const parentIIndex = state.lists.findIndex(
+        (data) => data.id === action.payload.parentId
+      )
+      const childIndexI = state.lists[parentIIndex].sublist.findIndex(
+        (d) => d.id === action.payload.childId
+      )
+      state.lists[parentIIndex].sublist[childIndexI] = {
+        ...state.lists[parentIIndex].sublist[childIndexI],
+        completed: false,
+      }
+      return {
+        ...state,
+        lists: state.lists,
       }
 
     default:
       return state
   }
 }
-
 export default reducer
