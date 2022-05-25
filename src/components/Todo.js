@@ -7,7 +7,6 @@ import { Box, Button, TextField, Tooltip } from '@mui/material'
 
 const Todo = () => {
   const [task, setTask] = useState('')
-
   const dispatch = useDispatch()
 
   return (

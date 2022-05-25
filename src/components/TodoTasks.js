@@ -41,8 +41,8 @@ const TodoTasks = () => {
   const dispatch = useDispatch()
   const [subTask, setSubTask] = useState('')
   const [completed, setCompleted] = useState(false)
-  const [ccompleted, setcCompleted] = useState(false)
-  const list = useSelector((state) => state.rootReducers.reducer.lists)
+  const [childCompleted, setChildCompleted] = useState(false)
+  const lists = useSelector((state) => state.rootReducers.reducer.lists)
 
   const [expanded, setExpanded] = useState()
   const handleExpandClick = () => {
@@ -52,22 +52,28 @@ const TodoTasks = () => {
   return (
     <div>
       {/* Main Tasks Display  */}
-      {list.map((tl) => {
+      {lists.map((parentTaskList) => {
         return (
           <>
-            <Card key={tl.id} sx={{ width: 300, minHeight: 20 }}>
+            <Card key={parentTaskList.id} sx={{ width: 300, minHeight: 20 }}>
               <CardContent>
                 <FormControlLabel
-                  label={tl.name}
+                  label={parentTaskList.name}
                   control={
                     <Checkbox
-                      checked={tl.completed}
+                      checked={parentTaskList.completed}
                       onClick={(e) => {
                         e.preventDefault()
                         setCompleted(!completed)
-                        !tl.completed
-                          ? dispatch(addActionComplete({ parentId: tl.id }))
-                          : dispatch(addActionInComplete({ parentId: tl.id }))
+                        !parentTaskList.completed
+                          ? dispatch(
+                              addActionComplete({ parentId: parentTaskList.id })
+                            )
+                          : dispatch(
+                              addActionInComplete({
+                                parentId: parentTaskList.id,
+                              })
+                            )
                       }}
                     />
                   }
@@ -76,7 +82,7 @@ const TodoTasks = () => {
                 <IconButton
                   aria-label="delete"
                   onClick={() => {
-                    dispatch(deleteTask({ parentId: tl.id }))
+                    dispatch(deleteTask({ parentId: parentTaskList.id }))
                   }}
                 >
                   <FontAwesomeIcon
@@ -102,28 +108,28 @@ const TodoTasks = () => {
               </CardActions>
 
               <Collapse in={expanded} timeout="auto" unmountOnExit>
-                {tl.sublist.map((sl) => {
+                {parentTaskList.sublist.map((childTaskList) => {
                   return (
                     <CardContent>
                       <FormControlLabel
-                        label={sl.name}
+                        label={childTaskList.name}
                         control={
                           <Checkbox
-                            checked={sl.completed}
+                            checked={childTaskList.completed}
                             onClick={(e) => {
                               e.preventDefault()
-                              setcCompleted(!ccompleted)
-                              !sl.completed
+                              setChildCompleted(!childCompleted)
+                              !childTaskList.completed
                                 ? dispatch(
                                     addChildActionComplete({
-                                      parentId: tl.id,
-                                      childId: sl.id,
+                                      parentId: parentTaskList.id,
+                                      childId: childTaskList.id,
                                     })
                                   )
                                 : dispatch(
                                     addChildActionInComplete({
-                                      parentId: tl.id,
-                                      childId: sl.id,
+                                      parentId: parentTaskList.id,
+                                      childId: childTaskList.id,
                                     })
                                   )
                             }}
@@ -135,8 +141,8 @@ const TodoTasks = () => {
                         onClick={() => {
                           dispatch(
                             deleteChildTask({
-                              parentId: tl.id,
-                              childId: sl.id,
+                              parentId: parentTaskList.id,
+                              childId: childTaskList.id,
                             })
                           )
                         }}
@@ -161,7 +167,10 @@ const TodoTasks = () => {
                     onSubmit={(e) => {
                       e.preventDefault()
                       dispatch(
-                        addChildList({ parentId: tl.id, name: subTask }),
+                        addChildList({
+                          parentId: parentTaskList.id,
+                          name: subTask,
+                        }),
                         setSubTask('')
                       )
                     }}
