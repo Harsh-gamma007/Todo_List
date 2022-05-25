@@ -98,18 +98,18 @@ const reducer = (state = initialStates, action) => {
       }
 
     case DELETE_CHILD_TASK:
-      const parentOfChilsIdIndex = findParentIndex({
+      const parentOfChildsIdIndex = findParentIndex({
         lists: state.lists,
         id: action.payload.parentId,
       })
       const childIndex = findChildIndex({
         lists: state.lists,
-        parentIndex: parentOfChilsIdIndex,
+        parentIndex: parentOfChildsIdIndex,
         id: action.payload.childId,
       })
-      state.lists[parentOfChilsIdIndex].sublist = {
-        ...state.lists[parentOfChilsIdIndex].sublist.slice(0, childIndex),
-        ...state.lists[parentOfChilsIdIndex].sublist.slice(childIndex + 1),
+      state.lists[parentOfChildsIdIndex].sublist = {
+        ...state.lists[parentOfChildsIdIndex].sublist.slice(0, childIndex),
+        ...state.lists[parentOfChildsIdIndex].sublist.slice(childIndex + 1),
       }
 
       return {
