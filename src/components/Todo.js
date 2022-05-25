@@ -2,9 +2,11 @@ import React, { useState } from 'react'
 import '../styles.css'
 import TodoTasks from './TodoTasks'
 import { useDispatch } from 'react-redux'
-import { addParentList } from '../actions/index'
+import { addParentList } from '../actions/list'
 import { Box, Button, TextField, Tooltip } from '@mui/material'
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlus } from '@fortawesome/fontawesome-free-solid'
 const Todo = () => {
   const [task, setTask] = useState('')
   const dispatch = useDispatch()
@@ -39,13 +41,19 @@ const Todo = () => {
           </Tooltip>
 
           <br />
+
           <Button
             type="submit"
             variant="contained"
             color="success"
             size="small"
+            disabled={!task}
           >
-            ➕ Add
+            Add
+            <FontAwesomeIcon
+              icon={faPlus}
+              style={{ maxWidth: '25px', paddingLeft: '5px' }}
+            />
           </Button>
         </Box>
       </div>

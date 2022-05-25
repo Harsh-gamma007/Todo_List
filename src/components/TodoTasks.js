@@ -8,8 +8,10 @@ import {
   addActionInComplete,
   addChildActionComplete,
   addChildActionInComplete,
-} from '../actions/index'
+} from '../actions/list'
 import { styled } from '@mui/material/styles'
+
+import EditTask from '../components/EditTask'
 import {
   Box,
   TextField,
@@ -25,7 +27,11 @@ import {
 } from '@mui/material'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import { faAngleDown, faTrash } from '@fortawesome/fontawesome-free-solid'
+import {
+  faAngleDown,
+  faEdit,
+  faTrash,
+} from '@fortawesome/fontawesome-free-solid'
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props
@@ -67,7 +73,9 @@ const TodoTasks = () => {
                         setCompleted(!completed)
                         !parentTaskList.completed
                           ? dispatch(
-                              addActionComplete({ parentId: parentTaskList.id })
+                              addActionComplete({
+                                parentId: parentTaskList.id,
+                              })
                             )
                           : dispatch(
                               addActionInComplete({
@@ -78,6 +86,9 @@ const TodoTasks = () => {
                     />
                   }
                 />
+                <IconButton aria-label="delete">
+                  <FontAwesomeIcon icon={faEdit} style={{ maxWidth: '18px' }} />
+                </IconButton>
 
                 <IconButton
                   aria-label="delete"
@@ -136,6 +147,12 @@ const TodoTasks = () => {
                           />
                         }
                       />
+                      <IconButton aria-label="delete">
+                        <FontAwesomeIcon
+                          icon={faEdit}
+                          style={{ maxWidth: '18px' }}
+                        />
+                      </IconButton>
                       <IconButton
                         aria-label="delete"
                         onClick={() => {

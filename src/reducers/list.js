@@ -9,7 +9,7 @@ import {
   ADD_CHILD_ACTION_COMPLETE,
   ADD_CHILD_ACTION_INCOMPLETE,
 } from '../const'
-
+import { findParentIndex, findChildIndex } from '../utils/helper'
 const initialStates = {
   lists: [],
 }
@@ -53,9 +53,11 @@ const reducer = (state = initialStates, action) => {
       }
 
     case ADD_ACTION_COMPLETE:
-      const parentIndex = state.lists.findIndex(
-        (data) => data.id === action.payload.parentId
-      )
+      const parentIndex = findParentIndex({
+        lists: state.lists,
+        id: action.payload.parentId,
+      })
+
       state.lists[parentIndex] = {
         ...state.lists[parentIndex],
         completed: !state.lists[parentIndex].completed,
@@ -66,9 +68,11 @@ const reducer = (state = initialStates, action) => {
       }
 
     case ADD_ACTION_INCOMPLETE:
-      const parentIndexIn = state.lists.findIndex(
-        (data) => data.id === action.payload.parentId
-      )
+      const parentIndexIn = findParentIndex({
+        lists: state.lists,
+        id: action.payload.parentId,
+      })
+
       state.lists[parentIndexIn] = {
         ...state.lists[parentIndexIn],
         completed: false,
@@ -80,9 +84,10 @@ const reducer = (state = initialStates, action) => {
 
     // Reducers for sublist / child
     case ADD_CHILD_LIST:
-      const parentOfChilIdIndex = state.lists.findIndex(
-        (data) => data.id === action.payload.parentId
-      )
+      const parentOfChilIdIndex = findParentIndex({
+        lists: state.lists,
+        id: action.payload.parentId,
+      })
       state.lists[parentOfChilIdIndex].sublist.push({
         id: random(),
         name: action.payload.name,
@@ -93,15 +98,18 @@ const reducer = (state = initialStates, action) => {
       }
 
     case DELETE_CHILD_TASK:
-      const parentOfChilIdIdIndex = state.lists.findIndex(
-        (data) => data.id === action.payload.parentId
-      )
-      const childIndex = state.lists[parentOfChilIdIdIndex].sublist.findIndex(
-        (d) => d.id === action.payload.childId
-      )
-      state.lists[parentOfChilIdIdIndex].sublist = {
-        ...state.lists[parentOfChilIdIdIndex].sublist.slice(0, childIndex),
-        ...state.lists[parentOfChilIdIdIndex].sublist.slice(childIndex + 1),
+      const parentOfChilsIdIndex = findParentIndex({
+        lists: state.lists,
+        id: action.payload.parentId,
+      })
+      const childIndex = findChildIndex({
+        lists: state.lists,
+        parentIndex: parentOfChilsIdIndex,
+        id: action.payload.childId,
+      })
+      state.lists[parentOfChilsIdIndex].sublist = {
+        ...state.lists[parentOfChilsIdIndex].sublist.slice(0, childIndex),
+        ...state.lists[parentOfChilsIdIndex].sublist.slice(childIndex + 1),
       }
 
       return {
@@ -110,14 +118,17 @@ const reducer = (state = initialStates, action) => {
       }
 
     case ADD_CHILD_ACTION_COMPLETE:
-      const parentsChildIdIndex = state.lists.findIndex(
-        (data) => data.id === action.payload.parentId
-      )
-      const childIndexC = state.lists[parentsChildIdIndex].sublist.findIndex(
-        (d) => d.id === action.payload.childId
-      )
-      state.lists[parentsChildIdIndex].sublist[childIndexC] = {
-        ...state.lists[parentsChildIdIndex].sublist[childIndexC],
+      const parentsChildIdsIndex = findParentIndex({
+        lists: state.lists,
+        id: action.payload.parentId,
+      })
+      const childIndexC = findChildIndex({
+        lists: state.lists,
+        parentIndex: parentsChildIdsIndex,
+        id: action.payload.childId,
+      })
+      state.lists[parentsChildIdsIndex].sublist[childIndexC] = {
+        ...state.lists[parentsChildIdsIndex].sublist[childIndexC],
         completed: true,
       }
       return {
@@ -126,12 +137,15 @@ const reducer = (state = initialStates, action) => {
       }
 
     case ADD_CHILD_ACTION_INCOMPLETE:
-      const parentsChildidIndex = state.lists.findIndex(
-        (data) => data.id === action.payload.parentId
-      )
-      const childIndexI = state.lists[parentsChildidIndex].sublist.findIndex(
-        (d) => d.id === action.payload.childId
-      )
+      const parentsChildidIndex = findParentIndex({
+        lists: state.lists,
+        id: action.payload.parentId,
+      })
+      const childIndexI = findChildIndex({
+        lists: state.lists,
+        parentIndex: parentsChildidIndex,
+        id: action.payload.childId,
+      })
       state.lists[parentsChildidIndex].sublist[childIndexI] = {
         ...state.lists[parentsChildidIndex].sublist[childIndexI],
         completed: false,
