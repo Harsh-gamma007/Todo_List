@@ -86,7 +86,7 @@ const TodoTasks = () => {
                     />
                   }
                 />
-                <IconButton aria-label="delete">
+                <IconButton aria-label="edit">
                   <FontAwesomeIcon icon={faEdit} style={{ maxWidth: '18px' }} />
                 </IconButton>
 
@@ -147,7 +147,7 @@ const TodoTasks = () => {
                           />
                         }
                       />
-                      <IconButton aria-label="delete">
+                      <IconButton aria-label="edit">
                         <FontAwesomeIcon
                           icon={faEdit}
                           style={{ maxWidth: '18px' }}
