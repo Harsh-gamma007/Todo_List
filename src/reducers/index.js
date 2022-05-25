@@ -1,4 +1,4 @@
-import reducer from './reducer'
+import reducer from './list'
 
 import { combineReducers } from '@reduxjs/toolkit'
 

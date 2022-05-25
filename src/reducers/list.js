@@ -14,7 +14,7 @@ const initialStates = {
   lists: [],
 }
 
-var random = () => {
+const random = () => {
   return Math.random().toString(36).substr(2, 3)
 }
 
@@ -41,14 +41,14 @@ const reducer = (state = initialStates, action) => {
       }
 
     case DELETE_TASK:
-      const pIdIndex = state.lists.findIndex(
+      const parentIdIndex = state.lists.findIndex(
         (data) => data.id === action.payload.parentId
       )
       return {
         ...state,
         lists: [
-          ...state.lists.slice(0, pIdIndex),
-          ...state.lists.slice(pIdIndex + 1),
+          ...state.lists.slice(0, parentIdIndex),
+          ...state.lists.slice(parentIdIndex + 1),
         ],
       }
 
@@ -80,10 +80,10 @@ const reducer = (state = initialStates, action) => {
 
     // Reducers for sublist / child
     case ADD_CHILD_LIST:
-      const parentIdIndex = state.lists.findIndex(
+      const parentOfChilIdIndex = state.lists.findIndex(
         (data) => data.id === action.payload.parentId
       )
-      state.lists[parentIdIndex].sublist.push({
+      state.lists[parentOfChilIdIndex].sublist.push({
         id: random(),
         name: action.payload.name,
         completed: false,
@@ -93,16 +93,15 @@ const reducer = (state = initialStates, action) => {
       }
 
     case DELETE_CHILD_TASK:
-      const pidIndex = state.lists.findIndex(
+      const parentOfChilIdIdIndex = state.lists.findIndex(
         (data) => data.id === action.payload.parentId
       )
-      const childIndex = state.lists[pidIndex].sublist.findIndex(
+      const childIndex = state.lists[parentOfChilIdIdIndex].sublist.findIndex(
         (d) => d.id === action.payload.childId
       )
-      console.log(childIndex)
-      state.lists[pidIndex].sublist = {
-        ...state.lists[pidIndex].sublist.slice(0, childIndex),
-        ...state.lists[pidIndex].sublist.slice(childIndex + 1),
+      state.lists[parentOfChilIdIdIndex].sublist = {
+        ...state.lists[parentOfChilIdIdIndex].sublist.slice(0, childIndex),
+        ...state.lists[parentOfChilIdIdIndex].sublist.slice(childIndex + 1),
       }
 
       return {
@@ -111,14 +110,14 @@ const reducer = (state = initialStates, action) => {
       }
 
     case ADD_CHILD_ACTION_COMPLETE:
-      const parentCIndex = state.lists.findIndex(
+      const parentsChildIdIndex = state.lists.findIndex(
         (data) => data.id === action.payload.parentId
       )
-      const childIndexC = state.lists[parentCIndex].sublist.findIndex(
+      const childIndexC = state.lists[parentsChildIdIndex].sublist.findIndex(
         (d) => d.id === action.payload.childId
       )
-      state.lists[parentCIndex].sublist[childIndexC] = {
-        ...state.lists[parentCIndex].sublist[childIndexC],
+      state.lists[parentsChildIdIndex].sublist[childIndexC] = {
+        ...state.lists[parentsChildIdIndex].sublist[childIndexC],
         completed: true,
       }
       return {
@@ -127,14 +126,14 @@ const reducer = (state = initialStates, action) => {
       }
 
     case ADD_CHILD_ACTION_INCOMPLETE:
-      const parentIIndex = state.lists.findIndex(
+      const parentsChildidIndex = state.lists.findIndex(
         (data) => data.id === action.payload.parentId
       )
-      const childIndexI = state.lists[parentIIndex].sublist.findIndex(
+      const childIndexI = state.lists[parentsChildidIndex].sublist.findIndex(
         (d) => d.id === action.payload.childId
       )
-      state.lists[parentIIndex].sublist[childIndexI] = {
-        ...state.lists[parentIIndex].sublist[childIndexI],
+      state.lists[parentsChildidIndex].sublist[childIndexI] = {
+        ...state.lists[parentsChildidIndex].sublist[childIndexI],
         completed: false,
       }
       return {
