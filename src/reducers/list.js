@@ -183,7 +183,9 @@ const reducer = (state = initialStates, action) => {
         parentIndex: parentidIndeC,
         id: action.payload.childId,
       })
+      
       console.log(childIndeC);
+
       console.log(action.payload.newTaskName)
       state.lists[parentidIndeC].sublist[childIndeC] = {
         ...state.lists[parentidIndeC].sublist[childIndeC],

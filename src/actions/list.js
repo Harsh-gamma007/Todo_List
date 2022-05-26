@@ -57,5 +57,5 @@ export const editParentTask = ({parentId, newTaskName }) => {
   return { type: EDIT_PARENT_TASK, payload: {parentId, newTaskName}}
 }
 export const editChildTask = ({parentId, childId, newTaskName }) => {
-  return { type: EDIT_CHILD_TASK, payload: {parentId, childId}}
+  return { type: EDIT_CHILD_TASK, payload: {parentId, childId, newTaskName}}
 }

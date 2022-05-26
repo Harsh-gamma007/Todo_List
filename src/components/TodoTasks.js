@@ -92,10 +92,6 @@ const TodoTasks = () => {
   const handleExpandClick = () => {
     setExpanded(!expanded)
   }
-  // const handleChange = (e) => {
-  //   setNewTask(e.target.value);
-  // };
-
   return (
     <div>
       {/* Main Tasks Display  */}
@@ -205,7 +201,7 @@ const TodoTasks = () => {
                   />
                 </Button>
           </div>
-          </Modal>
+          </Modal> 
                 
               </CardContent>
               {/* Child Tasks Sections */}
@@ -256,6 +252,7 @@ const TodoTasks = () => {
           {/* Edit child button  */}
           <IconButton aria-label="edit" 
             onClick={(e) => {
+             
               console.log(childTaskList.id)
               console.log(childTaskList.name)
               console.log(parentTaskList.id)
@@ -312,6 +309,7 @@ const TodoTasks = () => {
                   size="small"
                   onClick={(e) =>
                   {
+                   
                   e.preventDefault()
                   handleClose()
                   dispatch(editChildTask({
@@ -347,7 +345,6 @@ const TodoTasks = () => {
           </CardContent>
                   )
                 })}
-
                 <CardContent>
                   <Box
                     component="form"
