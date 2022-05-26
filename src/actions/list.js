@@ -8,6 +8,8 @@ import {
   ADD_ACTION_INCOMPLETE,
   ADD_CHILD_ACTION_COMPLETE,
   ADD_CHILD_ACTION_INCOMPLETE,
+  EDIT_PARENT_TASK,
+  EDIT_CHILD_TASK,
 } from '../const'
 
 export const getLists = () => {
@@ -50,4 +52,10 @@ export const addChildActionComplete = ({ parentId, childId }) => {
 
 export const addChildActionInComplete = ({ parentId, childId }) => {
   return { type: ADD_CHILD_ACTION_INCOMPLETE, payload: { parentId, childId } }
+}
+export const editParentTask = ({parentId, newTaskName }) => {
+  return { type: EDIT_PARENT_TASK, payload: {parentId, newTaskName}}
+}
+export const editChildTask = ({parentId, childId, newTaskName }) => {
+  return { type: EDIT_CHILD_TASK, payload: {parentId, childId}}
 }

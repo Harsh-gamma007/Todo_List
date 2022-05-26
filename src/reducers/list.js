@@ -8,6 +8,8 @@ import {
   ADD_ACTION_INCOMPLETE,
   ADD_CHILD_ACTION_COMPLETE,
   ADD_CHILD_ACTION_INCOMPLETE,
+  EDIT_PARENT_TASK,
+  EDIT_CHILD_TASK,
 } from '../const'
 import { findParentIndex, findChildIndex } from '../utils/helper'
 const initialStates = {
@@ -155,7 +157,44 @@ const reducer = (state = initialStates, action) => {
         lists: state.lists,
       }
 
-    default:
+    case EDIT_PARENT_TASK:
+      console.log(action.payload.parentId)
+      const parentidIndex = findParentIndex({
+        lists: state.lists,
+        id: action.payload.parentId,
+      })
+      console.log(parentidIndex)
+      state.lists[parentidIndex] = {
+        ...state.lists[parentidIndex],
+        name: action.payload.newTaskName,   
+      }
+      return{
+        ...state,
+        lists: state.lists,
+      }
+
+    case EDIT_CHILD_TASK:
+      const parentidIndeC = findParentIndex({
+        lists: state.lists,
+        id: action.payload.parentId,
+      })
+      const childIndeC = findChildIndex({
+        lists: state.lists,
+        parentIndex: parentidIndeC,
+        id: action.payload.childId,
+      })
+      console.log(childIndeC);
+      console.log(action.payload.newTaskName)
+      state.lists[parentidIndeC].sublist[childIndeC] = {
+        ...state.lists[parentidIndeC].sublist[childIndeC],
+        name: action.payload.newTaskName, 
+      }
+      return{
+        ...state,
+        lists: state.lists,
+      }
+
+      default:
       return state
   }
 }
